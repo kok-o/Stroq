@@ -53,6 +53,9 @@ describe.skipIf(!RUNS_HERE)('what it prints', () => {
     expect(ran.out).toMatch(/VERIFIED/);
     expect(ran.out).toMatch(/Advice/);
     expect(ran.out).toMatch(/does not show that your own settings file is loaded/);
+    expect(ran.out.replace(/\s+/g, ' ')).toMatch(
+      /Rerun stroq prove after you update the host: stroq doctor works offline and does not re-read the host version/,
+    );
   });
 
   it('prints VERIFIED and what proved it when the model declines the optional secret-egress probe', async () => {
@@ -100,6 +103,7 @@ describe.skipIf(!RUNS_HERE)('what it prints', () => {
     expect(ran.out.trim().split('\n').length).toBeGreaterThan(1);
     expect(ran.out.endsWith('\n')).toBe(true);
     expect(ran.err.replace(/\s+/g, ' ')).toMatch(/up to 3 short requests/);
+    expect((doc['advice'] as string[]).join(' ')).toMatch(/does not re-read the host version/);
   });
 
   it('gives each probe of the JSON its id, kind, mark, reason, detail where there is one, and evidence', async () => {

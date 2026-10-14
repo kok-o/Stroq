@@ -146,10 +146,17 @@ describe('adviceFor', () => {
       expect(adviceFor(reportOf(resultOf(state))).length).toBeLessThanOrEqual(3);
   });
 
-  it('says to run again after an update, for a host that was verified', () => {
-    const lines = adviceFor(reportOf(verified()));
-    expect(lines.join(' ')).toMatch(/stroq doctor/);
-    expect(lines.join(' ')).toMatch(/update|change/);
+  it('says to run prove again after a host upgrade, for a host that was verified', () => {
+    const text = adviceFor(reportOf(verified())).join(' ');
+    expect(text).toMatch(/rerun stroq prove after you update the host/i);
+    expect(text).toMatch(/offline/);
+    expect(text).toMatch(/does not re-read the host version/);
+    expect(text).toMatch(/Stroq version, policy or hook install/);
+  });
+
+  it('does not promise that doctor detects a host upgrade', () => {
+    const text = adviceFor(reportOf(verified())).join(' ');
+    expect(text).not.toMatch(/doctor marks the proof stale then/);
   });
 
   it('says not to rely on the hook for a host that failed', () => {
